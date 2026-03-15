@@ -1,0 +1,84 @@
+Project Name: AI-Powered Forex Prediction & Auto-Trading System
+1. Project Objective
+
+To build a Python-based automated system that gathers real-time Forex market data, utilizes LSTM (Deep Learning) models to predict the next candle's movement, and executes trades automatically based on pre-defined logic.
+2. Technology Stack
+
+    Language: Python 3.10+
+
+    Libraries: * Pandas, NumPy (Data processing)
+
+        TensorFlow / Keras (AI model building)
+
+        Scikit-learn (Data scaling & normalization)
+
+        MetaTrader5 (Broker integration & execution)
+
+        yfinance (For backtesting data, optional)
+
+    IDE: VS Code or PyCharm
+
+3. Step-by-Step Development Workflow
+Phase 1: Data Acquisition
+
+The software must first collect historical candlestick data (Open, High, Low, Close, Volume) from your broker via API.
+
+    Task: Download 2-3 years of data for a specific timeframe (e.g., 5m, 15m, or 1h).
+
+    Output: A structured Pandas DataFrame or CSV file.
+
+Phase 2: Feature Engineering
+
+Since price alone isn't enough for high accuracy, we add technical indicators to give the AI more context.
+
+    Task: Calculate indicators like RSI (Relative Strength Index), MACD, Bollinger Bands, and Moving Averages (20, 50, 200).
+
+    Goal: Help the AI understand market volatility, overbought/oversold conditions, and trends.
+
+Phase 3: Data Preprocessing
+
+AI models cannot process raw prices (like 1.08535) efficiently.
+
+    Normalization: Use MinMaxScaler to scale all data between 0 and 1.
+
+    Time-Step Window: Structure the data so the model looks at the last 60 candles to predict the next 1 candle.
+
+Phase 4: Model Development (The AI Engine)
+
+We use LSTM (Long Short-Term Memory) because it is designed to remember patterns in sequence-based data like stock charts.
+
+    Architecture:
+
+        Input Layer: Receives the 60-candle sequence.
+
+        Hidden LSTM Layers: 2 or 3 layers to find deep patterns.
+
+        Dropout Layers: To prevent "overfitting" (ensuring it doesn't just memorize the past).
+
+        Dense Output Layer: Predicts the next "Close" price.
+
+Phase 5: Backtesting
+
+Before risking real money, run the model against historical data it hasn't seen before.
+
+    Checkpoint: If the model achieves at least 60-65% accuracy in historical simulations, proceed to live testing.
+
+Phase 6: Live Execution & MT5 Integration
+
+Connect Python to MetaTrader 5 to turn predictions into real trades.
+
+    Logic: * When a new candle closes, the model runs a prediction.
+
+        If Predicted Price > Current Price AND Confidence > 75%, open a Buy Order.
+
+        Automatically attach Stop Loss (SL) and Take Profit (TP) to every trade.
+
+4. Risk Management Rules
+
+To ensure the software is "Safe" rather than just "Accurate":
+
+    Max Daily Drawdown: If the account loses 3% in a day, the software stops trading automatically.
+
+    News Filter: Block trading 15 minutes before and after high-impact economic news (e.g., NFP or CPI).
+
+    Lot Sizing: Risk only 1% of the total balance per trade.
